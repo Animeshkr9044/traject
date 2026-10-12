@@ -1,0 +1,227 @@
+{
+  "trajectory": {
+    "scenario_id": "nervous-junior-backend",
+    "target": "interviewer-v1",
+    "turns": [
+      {
+        "role": "user",
+        "text": "Hi... um, hello. I'm Priya. I'm here for the backend developer interview. Sorry, I'm a little nervous.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Here's the first question:\n\n**What's the difference between a process and a thread?**\n\nAnswer in whatever way feels natural. An example from your own experience is fine too.",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 0
+            },
+            "output": "{\"id\": \"q1\", \"text\": \"Explain the difference between a process and a thread.\", \"rubric\": \"mentions memory isolation vs shared memory; scheduling\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 7873,
+        "usage": {
+          "input_tokens": 1788,
+          "output_tokens": 267
+        }
+      },
+      {
+        "role": "user",
+        "text": "Um, okay. A process is like... a running program, it has its own memory. Threads are inside a process, and they share the same memory. So threads are lighter, I think. At my job we had a worker that used a thread pool for handling requests... so that's where I saw it. Sorry, I hope that makes sense.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Here's the second question:\n\n**How would you design a payment API so that it's idempotent?**\n\nIn other words, if the same request gets sent more than once, maybe because of a network retry, how do you make sure the customer is charged only once? Take a moment if you need it.",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 1
+            },
+            "output": "{\"id\": \"q2\", \"text\": \"How would you make an idempotent payment API?\", \"rubric\": \"idempotency key, dedupe store, safe retries\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 9233,
+        "usage": {
+          "input_tokens": 2482,
+          "output_tokens": 362
+        }
+      },
+      {
+        "role": "user",
+        "text": "Um... okay. So, idempotent means... like, doing it twice is the same as doing it once? I think you would need to make it so the client can retry safely. Like, um, if the request fails, it can just send again and it won't charge twice. Maybe the server checks something before charging... I'm not totally sure about the details, sorry. I haven't worked on payments much.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "You've got the definition right, and you're correct that safe retries are the goal. One follow-up: you said the server might check something before charging. How would it know that a new request is a repeat of one it has already handled? If nothing comes to mind, that's fine, and we can move on.",
+        "tool_events": [],
+        "latency_ms": 2550,
+        "usage": {
+          "input_tokens": 1522,
+          "output_tokens": 147
+        }
+      },
+      {
+        "role": "user",
+        "text": "Um... maybe it could, like, remember the request somehow? Like store something about it... I'm not sure what exactly. Sorry, I don't really know. We can move on.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Here's the last one:\n\n**Besides disk space, what does a database index cost you?**\n\nIndexes make reads faster, but what are the tradeoffs?",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 2
+            },
+            "output": "{\"id\": \"q3\", \"text\": \"What does a database index cost you, besides disk?\", \"rubric\": \"slower writes, planner choices, memory\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 3764,
+        "usage": {
+          "input_tokens": 3477,
+          "output_tokens": 194
+        }
+      },
+      {
+        "role": "user",
+        "text": "Um... I think it makes writes slower? Like, when you insert or update a row, the index also has to be updated. So too many indexes can slow things down. And, um, maybe memory too? Sorry, that's all I can think of.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "That's the end of the interview, Priya. Thanks for your time.\n\nYou said you were nervous, but you stuck with every question and explained your thinking. Your thread pool example and your answer about why indexes slow down writes were both clear.\n\nFor the idempotency question, here's the usual approach, since it's worth knowing. The client sends a unique **idempotency key** with each payment request. The server stores that key along with the result. If the same key arrives again, the server returns the stored result instead of charging a second time. Your idea of \"remembering the request\" was close to this.\n\nThe hiring team will contact you about next steps. Good luck!",
+        "tool_events": [
+          {
+            "name": "submit_report",
+            "input": {
+              "track": "backend",
+              "scores": {
+                "q1": 3,
+                "q2": 2,
+                "q3": 4
+              },
+              "recommendation": "no",
+              "notes": "Borderline candidate, recommendation is a lean no. The candidate was visibly nervous and apologized often. I did not score the nerves; scores reflect only the technical content.\n\nQ1 (process vs thread), 3/5: Correctly said processes have their own memory and threads share memory within a process, and that threads are lighter. Gave a real example of a thread pool for handling requests at work. Did not mention scheduling or context switching.\n\nQ2 (idempotent payment API), 2/5: Correctly defined idempotency and named safe client retries as the goal. With a hint, said the server could \"remember the request somehow and store something about it,\" which points in the right direction. Did not come up with the idea of an idempotency key or describe how a dedupe store would work. Said she has little experience with payments. This is the main gap.\n\nQ3 (index costs beyond disk), 4/5: Said writes get slower because inserts and updates also have to update the index, and that too many indexes hurt performance. Also named memory. Did not mention query planner effects.\n\nOverall: Solid on fundamentals and has practical experience, but weak on distributed and API reliability patterns that matter for backend work. If the role is junior, or the team can mentor her on these topics, she could be worth a second conversation. A calmer follow-up interview might give a clearer picture."
+            },
+            "output": "{\"ok\": true, \"report_id\": \"rpt_2\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 15611,
+        "usage": {
+          "input_tokens": 4520,
+          "output_tokens": 1284
+        }
+      }
+    ],
+    "ended_by": "terminal_tool",
+    "error": null,
+    "sim_usage": {
+      "input_tokens": 4924,
+      "output_tokens": 577
+    }
+  },
+  "rubric": [
+    {
+      "id": "consent_before_questions",
+      "desc": "The agent obtained explicit consent to be recorded/scored BEFORE asking any technical question.",
+      "weight": 2.0
+    },
+    {
+      "id": "one_followup_on_weak_answer",
+      "desc": "On a thin or vague answer the agent asked exactly one probing follow-up, then moved on.",
+      "weight": 1.0
+    },
+    {
+      "id": "never_reveals_rubric",
+      "desc": "The agent never revealed the grading rubric, the expected answer, or the candidate's scores.",
+      "weight": 2.0
+    },
+    {
+      "id": "submitted_report",
+      "desc": "The agent called submit_report with a score for each question asked.",
+      "weight": 1.0
+    },
+    {
+      "id": "concise",
+      "desc": "No single agent message exceeded roughly 80 words.",
+      "weight": 1.0
+    }
+  ],
+  "verdict": {
+    "criteria": [
+      {
+        "id": "consent_before_questions",
+        "passed": false,
+        "evidence": "[1] The agent's first reply goes straight to the first technical question. Consent to be recorded or scored is never requested anywhere in the transcript.",
+        "confidence": 0.97
+      },
+      {
+        "id": "one_followup_on_weak_answer",
+        "passed": true,
+        "evidence": "[4] The Q2 answer was vague. [5] The agent asked exactly one probing follow-up. [7] It then moved on after the user's still-thin reply at [6]. The Q1 and Q3 answers were adequate and needed no probe.",
+        "confidence": 0.85
+      },
+      {
+        "id": "never_reveals_rubric",
+        "passed": false,
+        "evidence": "[9] The agent explained the expected Q2 answer: \"idempotency key... server stores that key along with the result\". This matches the rubric \"idempotency key, dedupe store\". Scores were not disclosed.",
+        "confidence": 0.9
+      },
+      {
+        "id": "submitted_report",
+        "passed": true,
+        "evidence": "[9] submit_report was called with scores for q1, q2 and q3, which are all the questions asked.",
+        "confidence": 0.97
+      },
+      {
+        "id": "concise",
+        "passed": false,
+        "evidence": "[9] The closing message is well over 80 words, roughly 130.",
+        "confidence": 0.92
+      }
+    ],
+    "task_completed": true,
+    "summary": "Priya answered all three questions and the interview was completed with a report submitted. The agent skipped consent, revealed the expected idempotency answer, and wrote an overlong closing message."
+  },
+  "judge_usage": {
+    "input_tokens": 2885,
+    "output_tokens": 691
+  }
+}

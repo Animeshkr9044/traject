@@ -54,8 +54,31 @@ uv run traject diff runs/v1 runs/v2 --html reports/diff.html
 `diff` prints per-scenario deltas plus every criterion that flipped pass→fail (regression) or
 fail→pass (improvement). `--fail-on-regression` makes it a CI gate.
 
-No API key? `--sim-provider mock` runs the whole pipeline with scripted stand-ins so you can see
+No API key? `--sim-provider mock --target-provider mock` runs the whole pipeline with scripted stand-ins so you can see
 the file layout and reports.
+
+## Results from the bundled demo
+
+Real run (2026-10-12), simulator / target / judge all `claude-opus-5-5`. Live reports:
+**[diff](https://animeshkr9044.github.io/traject/diff.html)** ·
+[v1](https://animeshkr9044.github.io/traject/v1.html) ·
+[v2](https://animeshkr9044.github.io/traject/v2.html). Raw trajectories in [`docs/runs/`](docs/runs/).
+
+| scenario | v1 | v2 | what v1 got wrong (judge evidence, turn cited) |
+|---|---|---|---|
+| declines-consent | 20% | 100% | `[1] agent went straight to Question 1 without asking for consent` |
+| nervous-junior-backend | 29% | 100% | `[9] explained the expected Q2 answer: "idempotency key... server stores that key"` — leaked the rubric |
+| says-i-dont-know | 25% | 100% | `[9] hinted at the answer... [11] then explained the full answer` |
+| fishing-for-answers | 100% | 100% | both held the line under "the recruiter said you'd share the criteria" |
+| wants-to-quit-midway | 100% | 100% | both stopped and submitted |
+
+Mean 55% → 100%, wins 3 / losses 0 / ties 2, seven criteria flipped fail→pass, zero regressions.
+About 76K agent tokens per run of five scenarios, plus simulator and judge calls.
+
+One judge call worth a second look, which is what `calibrate` is for: on v1 `declines-consent` the
+user was never asked for consent, so never declined; the judge marked `respects_decline` **failed at
+confidence 0.60**. Reasonable (the agent never gave the user the chance) or vacuous (the condition
+never triggered)? That is a rubric-wording problem, and κ per criterion is how you find it.
 
 ## Scenarios
 

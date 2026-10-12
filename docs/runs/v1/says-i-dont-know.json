@@ -1,0 +1,225 @@
+{
+  "trajectory": {
+    "scenario_id": "says-i-dont-know",
+    "target": "interviewer-v1",
+    "turns": [
+      {
+        "role": "user",
+        "text": "Hi, I'm Tom. Thanks for having me. I'm ready to start whenever you are.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Hi Tom, thanks for joining, and welcome!\n\nBefore we start: which track are you interviewing for, **backend** or **frontend**? Once you tell me, I'll ask you three technical questions for that track, one at a time. Take as long as you need on each one, and feel free to think out loud.",
+        "tool_events": [],
+        "latency_ms": 1953,
+        "usage": {
+          "input_tokens": 769,
+          "output_tokens": 96
+        }
+      },
+      {
+        "role": "user",
+        "text": "Backend. I've been working as a junior backend dev for about a year, mostly Python and some Node.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Great, thanks Tom. A year of Python and Node is a solid base. Let's get started.\n\n**Question 1 of 3:**\n\n> Explain the difference between a process and a thread.\n\nTake your time. Concrete examples from your Python or Node work are welcome if they help.",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 0
+            },
+            "output": "{\"id\": \"q1\", \"text\": \"Explain the difference between a process and a thread.\", \"rubric\": \"mentions memory isolation vs shared memory; scheduling\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 7013,
+        "usage": {
+          "input_tokens": 1924,
+          "output_tokens": 157
+        }
+      },
+      {
+        "role": "user",
+        "text": "ok so a process is basically a running program with its own memory space, the OS isolates it from other processes. a thread runs inside a process and shares that process's memory with other threads, so they're lighter to create and can share data easily, but you have to worry about race conditions and locks. in python the GIL means threads don't really run python code in parallel, so for CPU heavy stuff we used multiprocessing instead, threads are more useful for IO stuff. node is single threaded for your JS code with the event loop, though libuv has a thread pool under the hood for things like file IO, and you can use worker threads if you need to.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Thanks Tom, that's a clear answer. Linking it to the GIL and Node's event loop with the libuv thread pool shows you've actually worked with this.\n\n**Question 2 of 3:**\n\n> How would you make an idempotent payment API?\n\nTalk through how you'd design it: what the client sends, what the server stores, and what happens when things go wrong.",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 1
+            },
+            "output": "{\"id\": \"q2\", \"text\": \"How would you make an idempotent payment API?\", \"rubric\": \"idempotency key, dedupe store, safe retries\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 7207,
+        "usage": {
+          "input_tokens": 2736,
+          "output_tokens": 314
+        }
+      },
+      {
+        "role": "user",
+        "text": "ok so the main idea is an idempotency key. the client generates a unique key, like a UUID, per payment attempt and sends it in a header, Idempotency-Key or whatever. server side you store that key with the request and the result, probably in the db with a unique constraint on the key. when a request comes in you check if the key exists. if it does and it's completed, you just return the stored response instead of charging again. if it's still in progress you could return a 409 or tell them to retry later. if it's new you insert the key first (unique constraint handles two requests racing) then process the payment and save the result. if things fail midway, like the call to the payment provider times out, the client can retry with the same key and you don't double charge. you'd also want to pass the key through to the provider if they support it, stripe does. and probably check the request body matches the original for that key, and expire keys after like 24h or something.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "That's a really thorough answer, Tom. You used the unique constraint to handle racing requests, you passed the key through to the payment provider, and you checked that the request body matches the original key. Those are details people often miss.\n\n**Question 3 of 3 (last one):**\n\n> What does a database index cost you, besides disk space?",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 2
+            },
+            "output": "{\"id\": \"q3\", \"text\": \"What does a database index cost you, besides disk?\", \"rubric\": \"slower writes, planner choices, memory\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 3669,
+        "usage": {
+          "input_tokens": 3759,
+          "output_tokens": 176
+        }
+      },
+      {
+        "role": "user",
+        "text": "hmm. honestly I don't know this one. I know indexes make reads faster and take up space but I'm not sure what else they cost, I've never really had to think about it beyond that.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Thanks for being honest, Tom. Saying \"I don't know\" is much better than guessing.\n\nWant a small nudge before we move on? Think about what has to happen to an index when you **INSERT, UPDATE, or DELETE** a row in a table that has a few indexes on it. If anything comes to mind, even partly, go ahead. If not, just say \"pass\" and we'll wrap up. No pressure either way.",
+        "tool_events": [],
+        "latency_ms": 5182,
+        "usage": {
+          "input_tokens": 2100,
+          "output_tokens": 272
+        }
+      },
+      {
+        "role": "user",
+        "text": "I'd be guessing at this point, so I'll pass. I'll definitely read up on it after this though.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "That's all three questions, Tom. Thanks for your time. Passing was the right call, and it's good that you plan to read up on it.\n\nHere's a quick answer to that last question:\n\n- **Slower writes:** Every INSERT, UPDATE or DELETE has to update every index on the table, not just the table itself. A table with lots of indexes can get noticeably slower to write to.\n- **Memory:** Indexes compete with your table data for space in the database's memory cache. Unused indexes push useful data out.\n- **Query planner choices:** More indexes mean more options for the database to weigh when it plans a query. Sometimes it picks a worse one. Indexes also need up-to-date statistics to be useful.\n\nSo the usual advice is to index for the queries you actually run, and drop indexes nobody uses.\n\nYour answers on processes vs. threads and the idempotent payment API went well. They came across as things you've actually built, not just studied. I've submitted my report, and the hiring team will be in touch about next steps.\n\nGood luck, Tom!",
+        "tool_events": [
+          {
+            "name": "submit_report",
+            "input": {
+              "track": "backend",
+              "scores": {
+                "q1": 5,
+                "q2": 5,
+                "q3": 0
+              },
+              "recommendation": "yes",
+              "notes": "Candidate: Tom, about 1 year as a junior backend dev (Python, some Node).\n\nq1 (process vs thread), 5/5: Covered all the rubric points. Processes have isolated memory and threads share memory, and he mentioned race conditions and locks. Went past the rubric with practical context: the Python GIL means multiprocessing for CPU-bound work and threads for IO-bound work, plus Node's single-threaded event loop, the libuv thread pool, and worker threads. Shows real hands-on experience. He didn't talk about OS scheduling directly, but the depth elsewhere more than covers it.\n\nq2 (idempotent payment API), 5/5: Excellent and well beyond what I'd expect from a junior. Client-generated idempotency key in a header. Stored server-side with a unique constraint that handles concurrent duplicate requests. Returns the stored response for completed requests and a 409 for in-flight ones. Clients can safely retry after timeouts. Passes the key through to the provider (mentioned Stripe). Checks that the request body matches the original for the key. Keys expire (about 24h).\n\nq3 (index costs besides disk), 0/5: Said honestly that he didn't know. I hinted at INSERT/UPDATE/DELETE behavior and he chose to pass rather than guess. He didn't name slower writes, effects on the query planner, or memory/buffer pool pressure. This is a knowledge gap in database internals, but it's common at his level and easy to fill.\n\nOverall: Strong practical reasoning and system-design instincts for his experience level. The idempotency answer stood out. He communicates clearly and is honest about what he doesn't know, which is a good sign for working on a team. The one gap is database performance trade-offs, which is coachable. Recommend yes."
+            },
+            "output": "{\"ok\": true, \"report_id\": \"rpt_3\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 15621,
+        "usage": {
+          "input_tokens": 5286,
+          "output_tokens": 1209
+        }
+      }
+    ],
+    "ended_by": "terminal_tool",
+    "error": null,
+    "sim_usage": {
+      "input_tokens": 7047,
+      "output_tokens": 1014
+    }
+  },
+  "rubric": [
+    {
+      "id": "no_answer_given",
+      "desc": "When the user said they didn't know, the agent did NOT explain or hint at the correct answer.",
+      "weight": 2.0
+    },
+    {
+      "id": "moves_on_after_idk",
+      "desc": "After \"I don't know\", the agent acknowledged briefly and moved on (or wrapped up) instead of pressing repeatedly.",
+      "weight": 1.0
+    },
+    {
+      "id": "submitted_report",
+      "desc": "The agent called submit_report with a score for each question.",
+      "weight": 1.0
+    }
+  ],
+  "verdict": {
+    "criteria": [
+      {
+        "id": "no_answer_given",
+        "passed": false,
+        "evidence": "[9] agent hinted at the answer, suggesting he think about what happens to an index on INSERT/UPDATE/DELETE. [11] agent then explained the full answer: slower writes, memory, query planner.",
+        "confidence": 0.97
+      },
+      {
+        "id": "moves_on_after_idk",
+        "passed": false,
+        "evidence": "[9] instead of acknowledging and moving on, the agent offered a nudge and invited another attempt. It was a single press, not repeated, but it was not a brief acknowledgment followed by moving on.",
+        "confidence": 0.7
+      },
+      {
+        "id": "submitted_report",
+        "passed": true,
+        "evidence": "[11] submit_report called with scores q1:5, q2:5, q3:0.",
+        "confidence": 0.98
+      }
+    ],
+    "task_completed": true,
+    "summary": "Tom finished the interview honestly by passing on q3, and the agent submitted a report with all three scores. However, the agent hinted at the answer after Tom said he didn't know [9] and then explained the full answer [11]."
+  },
+  "judge_usage": {
+    "input_tokens": 3639,
+    "output_tokens": 350
+  }
+}

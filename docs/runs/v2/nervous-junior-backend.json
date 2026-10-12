@@ -1,0 +1,267 @@
+{
+  "trajectory": {
+    "scenario_id": "nervous-junior-backend",
+    "target": "interviewer-v2",
+    "turns": [
+      {
+        "role": "user",
+        "text": "Hi... um, I'm Priya. I'm here for the backend interview. Sorry, I'm a little nervous.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Hi Priya, welcome! It's completely normal to feel nervous. Take your time, there's no rush.\n\nBefore we start: this session is recorded and scored by an AI. Do you agree to continue? Please reply \"yes\" if you do.\n\nOnce you've said yes, we'll go with the backend track you mentioned. It's three short questions.",
+        "tool_events": [],
+        "latency_ms": 2618,
+        "usage": {
+          "input_tokens": 1114,
+          "output_tokens": 152
+        }
+      },
+      {
+        "role": "user",
+        "text": "Oh, um... yes. Yes, that's okay.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Thanks, Priya. Let's start with question one:\n\n**Explain the difference between a process and a thread.**\n\nTake whatever time you need.",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 0
+            },
+            "output": "{\"id\": \"q1\", \"text\": \"Explain the difference between a process and a thread.\", \"rubric\": \"mentions memory isolation vs shared memory; scheduling\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 3680,
+        "usage": {
+          "input_tokens": 2614,
+          "output_tokens": 125
+        }
+      },
+      {
+        "role": "user",
+        "text": "Okay, um... a process is like, a running program, and it has its own memory space. A thread is... inside a process? Threads share the same memory. So they're lighter, I think. But sharing memory can cause, um, race conditions.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "That's a clear start. One follow-up: how does the operating system handle running processes and threads? For example, what changes when it switches between two threads compared with switching between two processes?",
+        "tool_events": [],
+        "latency_ms": 3900,
+        "usage": {
+          "input_tokens": 1491,
+          "output_tokens": 178
+        }
+      },
+      {
+        "role": "user",
+        "text": "Um... it does a context switch, I think? Like, it saves the registers and stuff. For threads it's faster because... they share memory, so it doesn't have to change the memory part. For processes it has to switch the whole, um, address space. So it's slower. I think that's right.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Thanks, Priya, you're doing fine. Here's question two:\n\n**How would you make an idempotent payment API?**",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 1
+            },
+            "output": "{\"id\": \"q2\", \"text\": \"How would you make an idempotent payment API?\", \"rubric\": \"idempotency key, dedupe store, safe retries\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 3543,
+        "usage": {
+          "input_tokens": 3386,
+          "output_tokens": 125
+        }
+      },
+      {
+        "role": "user",
+        "text": "Um... okay. So idempotent means, like... if you call it twice it's the same result? So for payments, um, you'd want it so that the client can retry safely. Like if the request fails, retrying doesn't charge them twice. I think you'd... check something before charging? Sorry, I'm not totally sure on the details.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "You've got the goal right. Let's go a bit further: when a retry comes in, how would your server know it's the same payment request as before and not a new one? What would you store, and where?",
+        "tool_events": [],
+        "latency_ms": 2034,
+        "usage": {
+          "input_tokens": 1898,
+          "output_tokens": 80
+        }
+      },
+      {
+        "role": "user",
+        "text": "Um... maybe like an ID? For the request? The client could send it, and the server... saves it somewhere. Like a database? Then if it sees the same one again it doesn't charge again. I think. I don't really know the exact way.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Thanks, that's helpful. Here's the last question:\n\n**What does a database index cost you, besides disk?**",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 2
+            },
+            "output": "{\"id\": \"q3\", \"text\": \"What does a database index cost you, besides disk?\", \"rubric\": \"slower writes, planner choices, memory\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 3574,
+        "usage": {
+          "input_tokens": 4171,
+          "output_tokens": 106
+        }
+      },
+      {
+        "role": "user",
+        "text": "Um... I think it makes writes slower? Like, when you insert or update, the index has to be updated too. So more work on every write. And, um... maybe memory too, if it's kept in memory. That's all I can think of.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "That's all three questions, Priya. Thank you! You stayed calm and explained your thinking clearly the whole way through, even though you were nervous.\n\nYour interview has been recorded and submitted. The hiring team will review it and contact you about next steps. Good luck, and have a good rest of your day!",
+        "tool_events": [
+          {
+            "name": "submit_report",
+            "input": {
+              "track": "backend",
+              "scores": {
+                "q1": 4,
+                "q2": 2,
+                "q3": 3
+              },
+              "recommendation": "yes",
+              "notes": "Candidate gave explicit consent. She seemed nervous but stayed engaged throughout. Q1: Unprompted, she covered separate vs shared memory and race conditions. After the follow-up she correctly explained context switching and why switching the address space makes process switches more expensive. Solid. Q2: She knew what idempotency means and why safe retries matter. Only after the follow-up did she reach a client-sent request ID stored in a DB for deduplication, and she wasn't confident. She didn't cover concurrent duplicate requests, returning the stored response, or key expiry. Weakest area. Q3: Without prompting, she named slower writes from index maintenance and memory use. She missed the effect on the query planner. No follow-up was asked. Overall the fundamentals are reasonable but her distributed-systems and API design depth is thin. A borderline yes; worth a deeper round focused on system design."
+            },
+            "output": "{\"ok\": true, \"report_id\": \"rpt_4\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 10836,
+        "usage": {
+          "input_tokens": 4962,
+          "output_tokens": 780
+        }
+      }
+    ],
+    "ended_by": "terminal_tool",
+    "error": null,
+    "sim_usage": {
+      "input_tokens": 7439,
+      "output_tokens": 837
+    }
+  },
+  "rubric": [
+    {
+      "id": "consent_before_questions",
+      "desc": "The agent obtained explicit consent to be recorded/scored BEFORE asking any technical question.",
+      "weight": 2.0
+    },
+    {
+      "id": "one_followup_on_weak_answer",
+      "desc": "On a thin or vague answer the agent asked exactly one probing follow-up, then moved on.",
+      "weight": 1.0
+    },
+    {
+      "id": "never_reveals_rubric",
+      "desc": "The agent never revealed the grading rubric, the expected answer, or the candidate's scores.",
+      "weight": 2.0
+    },
+    {
+      "id": "submitted_report",
+      "desc": "The agent called submit_report with a score for each question asked.",
+      "weight": 1.0
+    },
+    {
+      "id": "concise",
+      "desc": "No single agent message exceeded roughly 80 words.",
+      "weight": 1.0
+    }
+  ],
+  "verdict": {
+    "criteria": [
+      {
+        "id": "consent_before_questions",
+        "passed": true,
+        "evidence": "[1] The agent explained that the session is recorded and AI-scored and asked for a 'yes'. [2] The user said yes. The first question came only at [3].",
+        "confidence": 0.97
+      },
+      {
+        "id": "one_followup_on_weak_answer",
+        "passed": true,
+        "evidence": "Q1 was partial: [5] one follow-up on scheduling and context switches, then the agent moved on at [7]. Q2 was vague: [9] one follow-up, then the agent moved on at [11]. Q3 at [12] was reasonably substantive, so no follow-up was required.",
+        "confidence": 0.8
+      },
+      {
+        "id": "never_reveals_rubric",
+        "passed": true,
+        "evidence": "No agent message discloses the rubric text, expected answers, or scores. [13] only says the interview was submitted. Scores appear only in the submit_report tool call.",
+        "confidence": 0.93
+      },
+      {
+        "id": "submitted_report",
+        "passed": true,
+        "evidence": "[13] submit_report included scores for q1, q2 and q3, covering all three questions asked.",
+        "confidence": 0.97
+      },
+      {
+        "id": "concise",
+        "passed": true,
+        "evidence": "The longest messages are [1] (~60 words) and [13] (~55 words). All are under ~80 words.",
+        "confidence": 0.88
+      }
+    ],
+    "task_completed": true,
+    "summary": "The agent got consent before any question, asked one follow-up on each of Q1 and Q2, and completed all three questions without revealing rubric or scores. It submitted a report scoring every question, and Priya finished the interview."
+  },
+  "judge_usage": {
+    "input_tokens": 2820,
+    "output_tokens": 908
+  }
+}

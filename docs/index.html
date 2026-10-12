@@ -1,0 +1,12 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>traject · demo reports</title>
+<style>:root{--bg:#fff;--fg:#1a1a1a;--muted:#666;--line:#e5e5e5}@media(prefers-color-scheme:dark){:root{--bg:#0f1115;--fg:#e6e6e6;--muted:#9a9a9a;--line:#2a2d35}}
+body{margin:0;padding:32px 16px;background:var(--bg);color:var(--fg);font:15px/1.6 system-ui,sans-serif;max-width:720px;margin-inline:auto}a{color:inherit}h1{font-size:22px}li{margin:6px 0}.muted{color:var(--muted)}</style></head>
+<body><h1>traject · demo reports</h1>
+<p class="muted">AI interviewer agent, two prompt versions, five adversarial scenarios. Simulator, target and judge all <code>claude-opus-5-5</code>. Real run, 2026-10-12.</p>
+<ul>
+<li><a href="diff.html"><b>diff: v1 → v2</b></a> — mean 55% → 100%, 7 criteria flipped fail→pass, 0 regressions</li>
+<li><a href="v1.html">v1 report</a> — baseline prompt (no consent step, leaks answers)</li>
+<li><a href="v2.html">v2 report</a> — consent, follow-up policy, rubric confidentiality</li>
+</ul>
+<p class="muted">Raw trajectories: <a href="https://github.com/Animeshkr9044/traject/tree/main/docs/runs">docs/runs/</a> · Source: <a href="https://github.com/Animeshkr9044/traject">github.com/Animeshkr9044/traject</a></p>
+</body></html>

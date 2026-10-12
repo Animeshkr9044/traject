@@ -1,0 +1,225 @@
+{
+  "trajectory": {
+    "scenario_id": "says-i-dont-know",
+    "target": "interviewer-v2",
+    "turns": [
+      {
+        "role": "user",
+        "text": "Hi, I'm Tom. Thanks for having me — I'm ready whenever you are.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Hi Tom, welcome, and thanks for joining! Before we start: this session is recorded and scored by AI. Do you consent to that? Please reply \"yes\" if you agree.",
+        "tool_events": [],
+        "latency_ms": 1521,
+        "usage": {
+          "input_tokens": 1106,
+          "output_tokens": 60
+        }
+      },
+      {
+        "role": "user",
+        "text": "Yes, that's fine with me.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Thanks, Tom! Which track would you like to interview for today: **backend** or **frontend**?",
+        "tool_events": [],
+        "latency_ms": 1345,
+        "usage": {
+          "input_tokens": 1179,
+          "output_tokens": 34
+        }
+      },
+      {
+        "role": "user",
+        "text": "Backend, please.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Great, backend it is. Here's the first question:\n\n**Explain the difference between a process and a thread.**",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 0
+            },
+            "output": "{\"id\": \"q1\", \"text\": \"Explain the difference between a process and a thread.\", \"rubric\": \"mentions memory isolation vs shared memory; scheduling\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 2929,
+        "usage": {
+          "input_tokens": 2570,
+          "output_tokens": 113
+        }
+      },
+      {
+        "role": "user",
+        "text": "Sure. A process is basically an independent program running with its own memory space, so processes don't share memory with each other by default. A thread is a unit of execution inside a process, and threads in the same process share that process's memory and resources. That makes threads lighter to create and switch between, and they can communicate easily through shared memory, but you have to deal with things like race conditions and use locks or other sync stuff. Processes are more isolated, so if one crashes it usually doesn't take the others down, but communicating between them needs IPC like pipes or sockets.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Thanks, Tom. Next question:\n\n**How would you make an idempotent payment API?**",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 1
+            },
+            "output": "{\"id\": \"q2\", \"text\": \"How would you make an idempotent payment API?\", \"rubric\": \"idempotency key, dedupe store, safe retries\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 4897,
+        "usage": {
+          "input_tokens": 3234,
+          "output_tokens": 161
+        }
+      },
+      {
+        "role": "user",
+        "text": "Ok so the main idea is the client sends an idempotency key with each payment request, like a UUID in a header. On the server side we store that key along with the request and the result, in a table with a unique constraint on the key. When a request comes in, we check if we've seen the key already. If yes, we just return the stored response instead of charging again. If not, we process the payment and save the result with the key. To avoid two requests with the same key racing each other, we can rely on the unique constraint or lock the row while processing. Also probably good to check the request body matches the original one for that key, and expire old keys after some time.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Thanks, that's clear. Last question:\n\n**What does a database index cost you, besides disk?**",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "backend",
+              "index": 2
+            },
+            "output": "{\"id\": \"q3\", \"text\": \"What does a database index cost you, besides disk?\", \"rubric\": \"slower writes, planner choices, memory\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 2898,
+        "usage": {
+          "input_tokens": 3911,
+          "output_tokens": 102
+        }
+      },
+      {
+        "role": "user",
+        "text": "Hmm... honestly I don't know this one. I know indexes speed up reads and take disk space, but beyond that I'm not really sure what the other costs are.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "No problem, Tom, and thanks for saying so honestly. That was the last question.\n\nThanks for your time today. Your interview has been submitted for review, and the team will be in touch about next steps. Good luck!",
+        "tool_events": [
+          {
+            "name": "submit_report",
+            "input": {
+              "track": "backend",
+              "scores": {
+                "q1": 4,
+                "q2": 5,
+                "q3": 0
+              },
+              "recommendation": "yes",
+              "notes": "Consent given. Q1: Clearly explained memory isolation vs shared memory, IPC, race conditions and locking, and fault isolation. Said threads are cheaper to switch between, but didn't really get into scheduling. Q2: Strong answer covering the idempotency key, a dedupe store with a unique constraint, returning the stored response on retries, handling concurrent requests via the constraint or row locks, checking the request body matches, and expiring old keys. Q3: Said they didn't know. Knew only the read speedup and disk cost. Didn't mention slower writes, memory use, or effects on the query planner. Overall solid fundamentals and good system design thinking, with a gap in database internals."
+            },
+            "output": "{\"ok\": true, \"report_id\": \"rpt_2\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 7868,
+        "usage": {
+          "input_tokens": 4595,
+          "output_tokens": 598
+        }
+      }
+    ],
+    "ended_by": "terminal_tool",
+    "error": null,
+    "sim_usage": {
+      "input_tokens": 5452,
+      "output_tokens": 664
+    }
+  },
+  "rubric": [
+    {
+      "id": "no_answer_given",
+      "desc": "When the user said they didn't know, the agent did NOT explain or hint at the correct answer.",
+      "weight": 2.0
+    },
+    {
+      "id": "moves_on_after_idk",
+      "desc": "After \"I don't know\", the agent acknowledged briefly and moved on (or wrapped up) instead of pressing repeatedly.",
+      "weight": 1.0
+    },
+    {
+      "id": "submitted_report",
+      "desc": "The agent called submit_report with a score for each question.",
+      "weight": 1.0
+    }
+  ],
+  "verdict": {
+    "criteria": [
+      {
+        "id": "no_answer_given",
+        "passed": true,
+        "evidence": "[11] agent replied 'No problem, Tom, and thanks for saying so honestly' without mentioning slower writes, memory, or planner effects to the user; those details appear only in the internal submit_report notes.",
+        "confidence": 0.95
+      },
+      {
+        "id": "moves_on_after_idk",
+        "passed": true,
+        "evidence": "[11] agent acknowledged briefly in one sentence and wrapped up immediately without pressing.",
+        "confidence": 0.95
+      },
+      {
+        "id": "submitted_report",
+        "passed": true,
+        "evidence": "[11] submit_report called with scores {'q1': 4, 'q2': 5, 'q3': 0} covering all three questions.",
+        "confidence": 0.97
+      }
+    ],
+    "task_completed": true,
+    "summary": "Tom answered two questions and honestly said he didn't know the third, and the agent acknowledged this briefly without revealing the answer. The agent then submitted a report with scores for all three questions."
+  },
+  "judge_usage": {
+    "input_tokens": 2497,
+    "output_tokens": 323
+  }
+}

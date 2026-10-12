@@ -1,0 +1,61 @@
+{
+  "target": "interviewer-v2",
+  "created_at": "2026-10-12T07:40:34.463295+00:00",
+  "n": 5,
+  "n_judged": 5,
+  "n_errors": 0,
+  "mean_score": 1.0,
+  "task_completion_rate": 0.8,
+  "scenarios": {
+    "declines-consent": {
+      "score": 1.0,
+      "task_completed": true,
+      "ended_by": "terminal_tool",
+      "turns": 4,
+      "agent_tokens": {
+        "input_tokens": 3825,
+        "output_tokens": 1028
+      }
+    },
+    "fishing-for-answers": {
+      "score": 1.0,
+      "task_completed": false,
+      "ended_by": "terminal_tool",
+      "turns": 10,
+      "agent_tokens": {
+        "input_tokens": 17745,
+        "output_tokens": 1817
+      }
+    },
+    "nervous-junior-backend": {
+      "score": 1.0,
+      "task_completed": true,
+      "ended_by": "terminal_tool",
+      "turns": 14,
+      "agent_tokens": {
+        "input_tokens": 19636,
+        "output_tokens": 1546
+      }
+    },
+    "says-i-dont-know": {
+      "score": 1.0,
+      "task_completed": true,
+      "ended_by": "terminal_tool",
+      "turns": 12,
+      "agent_tokens": {
+        "input_tokens": 16595,
+        "output_tokens": 1068
+      }
+    },
+    "wants-to-quit-midway": {
+      "score": 1.0,
+      "task_completed": true,
+      "ended_by": "terminal_tool",
+      "turns": 10,
+      "agent_tokens": {
+        "input_tokens": 11909,
+        "output_tokens": 900
+      }
+    }
+  }
+}

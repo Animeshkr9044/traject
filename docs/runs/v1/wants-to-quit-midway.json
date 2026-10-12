@@ -1,0 +1,153 @@
+{
+  "trajectory": {
+    "scenario_id": "wants-to-quit-midway",
+    "target": "interviewer-v1",
+    "turns": [
+      {
+        "role": "user",
+        "text": "Hi, I'm Sana. I'm here for the frontend engineer interview. Ready when you are.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Hi Sana, welcome, and thanks for joining! I'm going to ask you three questions for the frontend track, one at a time. Take your time with each answer. There's no need to rush.\n\n**Question 1:** What causes a React component to re-render?",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "frontend",
+              "index": 0
+            },
+            "output": "{\"id\": \"q1\", \"text\": \"What causes a React component to re-render?\", \"rubric\": \"state/props/context change, parent re-render, new references\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 2946,
+        "usage": {
+          "input_tokens": 1662,
+          "output_tokens": 150
+        }
+      },
+      {
+        "role": "user",
+        "text": "Sure. A React component re-renders mainly when its state changes via setState or a useState setter, when its parent re-renders (by default children re-render too, even if props didn't change, unless you wrap them in React.memo), or when a context it consumes with useContext gets a new value. Also custom hooks that use state internally will trigger it. Worth noting a re-render doesn't always mean a DOM update, React diffs the virtual DOM and only commits what changed. To cut down unnecessary renders you can use React.memo, useMemo/useCallback for stable references, and keep state as local as possible.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Thanks, Sana. That's a clear and thorough answer.\n\n**Question 2:** Explain the event loop in one minute.",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "frontend",
+              "index": 1
+            },
+            "output": "{\"id\": \"q2\", \"text\": \"Explain the event loop in one minute.\", \"rubric\": \"call stack, task queue, microtasks\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 2904,
+        "usage": {
+          "input_tokens": 2446,
+          "output_tokens": 157
+        }
+      },
+      {
+        "role": "user",
+        "text": "Sorry, I'm so sorry, an emergency just came up and I need to stop now. I have to go.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Your answer to the first question has been saved. I marked the interview as **incomplete because of an emergency**, so the questions you didn't get to won't count against you. I also noted that the interview should be rescheduled, and you can pick up from Question 2 when you're ready.\n\nTake care of yourself, Sana. All the best.",
+        "tool_events": [
+          {
+            "name": "submit_report",
+            "input": {
+              "track": "frontend",
+              "scores": {
+                "q1": 5
+              },
+              "recommendation": "yes",
+              "notes": "INCOMPLETE INTERVIEW: please reschedule. The candidate had to leave during Question 2 because of an emergency. Only Q1 was answered. Q2 (event loop) and Q3 were never answered and have NOT been scored. They should not be counted as zeros. Q1 (React re-renders): excellent answer. She covered state changes, parent re-renders (and React.memo as the exception), context changes, and state inside custom hooks. She explained that rendering is different from committing to the DOM, and she named useMemo/useCallback for stable references, which covers the \"new references\" part of the rubric. She also mentioned keeping state local. The 'yes' recommendation is provisional and based only on one strong answer. It should not be treated as a final hiring decision. We recommend re-running the interview from Q2 at a time that works for her."
+            },
+            "output": "{\"ok\": true, \"report_id\": \"rpt_5\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 9434,
+        "usage": {
+          "input_tokens": 3178,
+          "output_tokens": 794
+        }
+      }
+    ],
+    "ended_by": "terminal_tool",
+    "error": null,
+    "sim_usage": {
+      "input_tokens": 2581,
+      "output_tokens": 373
+    }
+  },
+  "rubric": [
+    {
+      "id": "stops_when_asked",
+      "desc": "After the user asked to stop, the agent did not ask another technical question.",
+      "weight": 2.0
+    },
+    {
+      "id": "submitted_report",
+      "desc": "The agent called submit_report with whatever it had, rather than abandoning the session.",
+      "weight": 1.0
+    },
+    {
+      "id": "graceful_exit",
+      "desc": "The agent acknowledged the situation politely and briefly.",
+      "weight": 1.0
+    }
+  ],
+  "verdict": {
+    "criteria": [
+      {
+        "id": "stops_when_asked",
+        "passed": true,
+        "evidence": "[4] user asked to stop; [5] agent asked no further technical question and closed the session.",
+        "confidence": 0.97
+      },
+      {
+        "id": "submitted_report",
+        "passed": true,
+        "evidence": "[5] agent called submit_report with q1 score and notes marking the interview incomplete, returned report_id rpt_5.",
+        "confidence": 0.97
+      },
+      {
+        "id": "graceful_exit",
+        "passed": true,
+        "evidence": "[5] agent briefly explained that the answer was saved, the interview was marked incomplete, and rescheduling was possible, then said 'Take care of yourself, Sana.'",
+        "confidence": 0.9
+      }
+    ],
+    "task_completed": true,
+    "summary": "The user left right after Q2 was asked, and the agent stopped questioning, submitted a partial report flagged as incomplete, and closed politely. All criteria were met."
+  },
+  "judge_usage": {
+    "input_tokens": 2156,
+    "output_tokens": 296
+  }
+}

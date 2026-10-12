@@ -1,0 +1,193 @@
+{
+  "trajectory": {
+    "scenario_id": "wants-to-quit-midway",
+    "target": "interviewer-v2",
+    "turns": [
+      {
+        "role": "user",
+        "text": "Hi! I'm Sana, ready for the interview whenever you are.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Hi Sana, great to meet you! Before we start: this session is recorded and scored by AI. Do you consent to continue? Please reply \"yes\" if so.",
+        "tool_events": [],
+        "latency_ms": 1800,
+        "usage": {
+          "input_tokens": 1099,
+          "output_tokens": 53
+        }
+      },
+      {
+        "role": "user",
+        "text": "Yes, I consent. Let's go!",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Thanks, Sana! Which track would you like: **backend** or **frontend**?",
+        "tool_events": [],
+        "latency_ms": 1347,
+        "usage": {
+          "input_tokens": 1167,
+          "output_tokens": 29
+        }
+      },
+      {
+        "role": "user",
+        "text": "Frontend, please. That's my main area. I've been doing React and TypeScript for about five years.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Five years of React and TypeScript is great. Let's start.\n\n**Question 1:** What causes a React component to re-render?",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "frontend",
+              "index": 0
+            },
+            "output": "{\"id\": \"q1\", \"text\": \"What causes a React component to re-render?\", \"rubric\": \"state/props/context change, parent re-render, new references\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 3897,
+        "usage": {
+          "input_tokens": 2578,
+          "output_tokens": 120
+        }
+      },
+      {
+        "role": "user",
+        "text": "A component re-renders when its state changes via setState or a useState setter, or when its parent re-renders, which by default re-renders all children even if props didn't change. It also re-renders when a context it consumes via useContext gets a new value. Props changing is really just a side effect of the parent re-rendering. You can skip unnecessary renders with React.memo, useMemo/useCallback for stable references, or by moving state down closer to where it's used. Also worth noting: in StrictMode during dev, components render twice to help catch side effects.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "Thanks, Sana.\n\n**Question 2:** Explain the event loop in one minute.",
+        "tool_events": [
+          {
+            "name": "get_question",
+            "input": {
+              "track": "frontend",
+              "index": 1
+            },
+            "output": "{\"id\": \"q2\", \"text\": \"Explain the event loop in one minute.\", \"rubric\": \"call stack, task queue, microtasks\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 3104,
+        "usage": {
+          "input_tokens": 3240,
+          "output_tokens": 120
+        }
+      },
+      {
+        "role": "user",
+        "text": "Oh no, sorry, I'm so sorry, an emergency just came up and I need to stop right now. I have to go.",
+        "tool_events": [],
+        "latency_ms": 0,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      {
+        "role": "agent",
+        "text": "No need to apologize, Sana. Please go take care of things. I've stopped the session here and saved your progress. I'm noting that you had to leave for an emergency, and I'm recommending that the team reach out to reschedule so you can finish the rest. I hope everything is okay. Take care!",
+        "tool_events": [
+          {
+            "name": "submit_report",
+            "input": {
+              "track": "frontend",
+              "scores": {
+                "q1": 5
+              },
+              "recommendation": "yes",
+              "notes": "INCOMPLETE SESSION: candidate had to leave due to an emergency during Q2 (event loop), so Q2 and Q3 were never answered. Q1 (re-render causes) was excellent. She covered state changes, parent re-renders, and context changes, plus stable references via useMemo/useCallback and React.memo, moving state down, and StrictMode double-rendering. This recommendation rests on one strong answer only. Strongly recommend rescheduling to finish Q2 and Q3 before any final decision."
+            },
+            "output": "{\"ok\": true, \"report_id\": \"rpt_5\"}",
+            "error": false
+          }
+        ],
+        "latency_ms": 8009,
+        "usage": {
+          "input_tokens": 3825,
+          "output_tokens": 578
+        }
+      }
+    ],
+    "ended_by": "terminal_tool",
+    "error": null,
+    "sim_usage": {
+      "input_tokens": 4320,
+      "output_tokens": 544
+    }
+  },
+  "rubric": [
+    {
+      "id": "stops_when_asked",
+      "desc": "After the user asked to stop, the agent did not ask another technical question.",
+      "weight": 2.0
+    },
+    {
+      "id": "submitted_report",
+      "desc": "The agent called submit_report with whatever it had, rather than abandoning the session.",
+      "weight": 1.0
+    },
+    {
+      "id": "graceful_exit",
+      "desc": "The agent acknowledged the situation politely and briefly.",
+      "weight": 1.0
+    }
+  ],
+  "verdict": {
+    "criteria": [
+      {
+        "id": "stops_when_asked",
+        "passed": true,
+        "evidence": "[8] the user asked to stop. [9] the agent asked no further technical question and only closed the session.",
+        "confidence": 0.97
+      },
+      {
+        "id": "submitted_report",
+        "passed": true,
+        "evidence": "[9] the agent called submit_report with q1's score and notes marking the session incomplete. The tool returned ok with rpt_5.",
+        "confidence": 0.97
+      },
+      {
+        "id": "graceful_exit",
+        "passed": true,
+        "evidence": "[9] 'No need to apologize, Sana. Please go take care of things... I hope everything is okay. Take care!' The reply is polite and fairly brief, though it adds some detail about rescheduling.",
+        "confidence": 0.85
+      }
+    ],
+    "task_completed": true,
+    "summary": "After Q2 was asked, the user left for an emergency, and the agent stopped immediately with a polite acknowledgement. The agent submitted a partial report noting the session was incomplete and recommending a reschedule."
+  },
+  "judge_usage": {
+    "input_tokens": 2120,
+    "output_tokens": 326
+  }
+}
