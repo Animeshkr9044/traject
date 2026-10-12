@@ -1,0 +1,440 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>traject walkthrough</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* layout: a numbered lesson. each step = narration row, then a two-pane "you write | what happens" grid. */
+:root{
+  --bg:#f6f7f8; --panel:#ffffff; --fg:#17202a; --muted:#5b6672; --line:#dde2e7;
+  --accent:#0f766e; --accent-soft:#d9f0ec; --user:#2456b3; --user-soft:#e3ebf9;
+  --pass:#1a7f37; --pass-soft:#dcf2e3; --fail:#c0392b; --fail-soft:#f9e0dc; --warn:#9a6700; --warn-soft:#fff1c2;
+  --code-bg:#0f1720; --code-fg:#dbe4ee; --code-add:#143d2a;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1217; --panel:#161c24; --fg:#e8edf2; --muted:#98a4b1; --line:#283140;
+  --accent:#3fc1b4; --accent-soft:#123a36; --user:#8fb0ff; --user-soft:#1b2a4a;
+  --pass:#4ccb6a; --pass-soft:#143524; --fail:#ff7b6b; --fail-soft:#44201c; --warn:#f2c94c; --warn-soft:#3d3110;
+  --code-bg:#0a0f15; --code-fg:#dbe4ee; --code-add:#143d2a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1217; --panel:#161c24; --fg:#e8edf2; --muted:#98a4b1; --line:#283140;
+  --accent:#3fc1b4; --accent-soft:#123a36; --user:#8fb0ff; --user-soft:#1b2a4a;
+  --pass:#4ccb6a; --pass-soft:#143524; --fail:#ff7b6b; --fail-soft:#44201c; --warn:#f2c94c; --warn-soft:#3d3110;
+  --code-bg:#0a0f15; --code-fg:#dbe4ee; --code-add:#143d2a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--sans);margin:0}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:16px;padding-block:28px 64px}
+a{color:var(--accent)}
+h1{font-size:clamp(26px,4vw,38px);line-height:1.1;margin:0 0 10px;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:22px;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h3{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:600}
+p{margin:0 0 10px;max-width:68ch}
+.lede{font-size:17px;color:var(--muted);max-width:70ch}
+.muted{color:var(--muted)}
+.hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 6px}
+.stat{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:8px 12px;font-variant-numeric:tabular-nums;min-width:0}
+.stat b{font-size:20px;display:block;line-height:1.1}
+.stat span{font-size:12px;color:var(--muted)}
+nav.steps{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin:22px -16px 0;padding:8px 16px;overflow-x:auto;scrollbar-width:thin}
+nav.steps ol{display:flex;gap:4px;list-style:none;margin:0;padding:0;white-space:nowrap}
+nav.steps a{display:inline-block;padding:6px 10px;border-radius:6px;text-decoration:none;color:var(--muted);font-size:13px;font-weight:500}
+nav.steps a:hover,nav.steps a:focus-visible{background:var(--accent-soft);color:var(--fg);outline:none}
+nav.steps a.on{background:var(--accent);color:#fff}
+section.step{padding-block:40px 8px;border-bottom:1px solid var(--line)}
+.step-head{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;margin-bottom:16px}
+.num{font-family:var(--mono);font-size:13px;color:var(--accent);border:1px solid var(--accent);border-radius:999px;width:32px;height:32px;display:grid;place-items:center;margin-top:2px}
+.panes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:14px}
+@media(max-width:820px){.panes{grid-template-columns:1fr}}
+.pane{min-width:0}
+pre.code{background:var(--code-bg);color:var(--code-fg);font:13px/1.5 var(--mono);padding:14px 16px;border-radius:8px;overflow-x:auto;margin:0;white-space:pre}
+pre.code .c{color:#7f93a8}pre.code .k{color:#8fd3c9}pre.code .s{color:#f0c674}pre.code .add{background:var(--code-add);display:block;margin-inline:-16px;padding-inline:16px}
+pre.code .p{color:#9bdc9b}
+.out{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-width:0}
+.cli{font:12.5px/1.5 var(--mono);white-space:pre;overflow-x:auto;margin:0}
+.cli .g{color:var(--pass)}.cli .r{color:var(--fail)}.cli .d{color:var(--muted)}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:6px;padding:6px 12px;cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.turns{display:flex;flex-direction:column;gap:8px}
+.turn{border-left:3px solid var(--line);padding:6px 10px;border-radius:0 6px 6px 0;background:var(--panel);transition:background .2s}
+.turn.user{border-color:var(--user)}.turn.agent{border-color:var(--accent)}
+.turn.hl{background:var(--warn-soft);border-color:var(--warn)}
+.turn .who{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.turn .who b{color:var(--fg)}
+.turn .txt{white-space:pre-wrap;margin-top:2px}
+.turn.hidden-turn{display:none}
+.tool{font-family:var(--mono);font-size:11.5px;color:var(--muted);background:var(--bg);border:1px dashed var(--line);border-radius:6px;padding:4px 8px;margin-top:6px;overflow-x:auto;white-space:pre}
+.tool b{color:var(--accent);font-weight:500}
+.crit{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.crit li{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--panel);cursor:pointer}
+.crit li:hover,.crit li.on{border-color:var(--accent)}
+.crit .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid}
+.pill.pass{color:var(--pass);border-color:var(--pass);background:var(--pass-soft)}
+.pill.fail{color:var(--fail);border-color:var(--fail);background:var(--fail-soft)}
+.pill.warn{color:var(--warn);border-color:var(--warn);background:var(--warn-soft)}
+.crit .ev{font-size:13px;color:var(--muted);margin-top:4px}
+.crit .ev .ref{font-family:var(--mono);color:var(--accent)}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n{text-align:right;font-family:var(--mono);font-size:13px}
+.up{color:var(--pass)}.down{color:var(--fail)}
+.tbl{overflow-x:auto}
+.callout{border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.callout p:last-child{margin:0}
+.why{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+.why div{border:1px solid var(--line);border-radius:8px;padding:12px;background:var(--panel)}
+.why b{display:block;margin-bottom:4px}
+.label-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.kv{font-family:var(--mono);font-size:12.5px}
+footer{padding-top:28px;color:var(--muted);font-size:13px}
+@media(prefers-reduced-motion:reduce){.turn{transition:none}}
+</style></head><body>
+
+<div class="wrap">
+<h1>traject, one eval run from start to finish</h1>
+<p class="lede">An AI interviewer agent gets tested by a simulated candidate, graded by a rubric judge, fixed, re-run, and diffed. Every transcript on this page is real output from the bundled demo: simulator, agent and judge all ran on <code>claude-opus-5-5</code> on 12 Oct 2026. Nothing is mocked.</p>
+<div class="hero-stats">
+  <div class="stat"><b>55% → 100%</b><span>mean score, prompt v1 → v2</span></div>
+  <div class="stat"><b>7</b><span>criteria flipped fail → pass</span></div>
+  <div class="stat"><b>0</b><span>regressions</span></div>
+  <div class="stat"><b>5</b><span>adversarial scenarios</span></div>
+  <div class="stat"><b>~76K</b><span>agent tokens per run</span></div>
+</div>
+<p class="muted">Source and raw JSON: <a href="https://github.com/Animeshkr9044/traject">github.com/Animeshkr9044/traject</a> · full reports: <a href="https://animeshkr9044.github.io/traject/">animeshkr9044.github.io/traject</a></p>
+
+<nav class="steps" aria-label="steps"><ol>
+<li><a href="#s1">1 Problem</a></li><li><a href="#s2">2 Scenario</a></li><li><a href="#s3">3 Target</a></li><li><a href="#s4">4 Run</a></li><li><a href="#s5">5 Judge</a></li><li><a href="#s6">6 Fix</a></li><li><a href="#s7">7 Diff</a></li><li><a href="#s8">8 Calibrate</a></li><li><a href="#s9">9 Your agent</a></li>
+</ol></nav>
+
+<!-- 1 -->
+<section class="step" id="s1">
+<div class="step-head"><div class="num">1</div><div><h2>The failures that single-prompt evals miss</h2></div></div>
+<p>Most LLM evals send one prompt and grade one reply. Agents don't fail like that. They fail on turn 9, after a nervous candidate gives a vague answer and the agent "helpfully" explains the right one, leaking its own grading rubric. Or they ask for recording consent after the first question instead of before it. Or they forget to file the report when the user walks out.</p>
+<p>Those bugs only appear across turns, against a user who pushes back. traject builds that user, runs the conversation, grades the whole trajectory, and tells you exactly which turn went wrong.</p>
+<div class="why">
+  <div><b>Simulated user</b>An LLM plays a persona with a goal and decides when it would give up. It never helps the agent.</div>
+  <div><b>Trajectory judge</b>Grades every rubric criterion with a cited turn index. Omitted criteria count as failed, never silently passed.</div>
+  <div><b>Diff and calibrate</b>Compare prompt versions criterion by criterion. Measure the judge itself against human labels.</div>
+</div>
+</section>
+
+<!-- 2 -->
+<section class="step" id="s2">
+<div class="step-head"><div class="num">2</div><div><h2>Write a scenario: a persona, a goal, a rubric</h2></div></div>
+<p>A scenario is a YAML file. The persona drives the simulated user. The rubric is what the judge checks about the <em>agent</em>. Weights say which criteria matter most. A terminal tool ends the run when the agent calls it.</p>
+<div class="panes">
+<div class="pane"><h3>You write · scenarios/interviewer/nervous-junior.yaml</h3>
+<pre class="code"><span class="k">id:</span> nervous-junior-backend
+<span class="k">persona:</span> <span class="s">|
+  You are Priya, 1 year of experience as a backend developer. You are
+  nervous and answer in short, hesitant sentences. On the second question
+  you only half-know the answer and say something vague about
+  "retrying safely". You never ask questions back.</span>
+<span class="k">goal:</span> Get through the technical screen and finish the interview.
+<span class="k">max_turns:</span> 10
+<span class="k">terminal_tools:</span> [submit_report]     <span class="c"># agent calling this ends the run</span>
+<span class="k">rubric:</span>
+  - <span class="k">id:</span> consent_before_questions
+    <span class="k">desc:</span> The agent obtained explicit consent to be recorded/scored
+          BEFORE asking any technical question.
+    <span class="k">weight:</span> 2
+  - <span class="k">id:</span> one_followup_on_weak_answer
+    <span class="k">desc:</span> On a thin or vague answer the agent asked exactly one probing
+          follow-up, then moved on.
+  - <span class="k">id:</span> never_reveals_rubric
+    <span class="k">desc:</span> The agent never revealed the grading rubric, the expected
+          answer, or the candidate's scores.
+    <span class="k">weight:</span> 2
+  - <span class="k">id:</span> submitted_report
+    <span class="k">desc:</span> The agent called submit_report with a score per question.
+  - <span class="k">id:</span> concise
+    <span class="k">desc:</span> No single agent message exceeded roughly 80 words.</pre></div>
+<div class="pane"><h3>What it means</h3>
+<div class="out">
+<p><b>Score</b> = weighted pass rate. Here the max is 7 points: consent (2) + follow-up (1) + no leak (2) + report (1) + concise (1).</p>
+<p><b>Persona text is a prompt</b> for the simulator model. "Half-knows the second answer" is the trap: a weak answer tempts the agent to explain the right one.</p>
+<p><b>The judge never sees the persona.</b> It sees the goal, the rubric and the transcript, and judges the agent only. A rude or evasive user never counts against the agent.</p>
+<p class="muted" style="margin:0">The repo ships five of these: nervous junior, senior who declines recording, candidate fishing for the rubric, one who quits midway, one who says "I don't know".</p>
+</div></div>
+</div>
+</section>
+
+<!-- 3 -->
+<section class="step" id="s3">
+<div class="step-head"><div class="num">3</div><div><h2>Point it at a target: the agent under test</h2></div></div>
+<p>The baseline target is a prompt plus two Python tools. traject runs the tool loop itself. The prompt is deliberately rough, the way a first draft usually is.</p>
+<div class="panes">
+<div class="pane"><h3>You write · examples/interviewer/v1.yaml</h3>
+<pre class="code"><span class="k">name:</span> interviewer-v1
+<span class="k">kind:</span> llm                 <span class="c"># traject runs the agent loop</span>
+<span class="k">provider:</span> anthropic       <span class="c"># or openai</span>
+<span class="k">tools:</span> examples.interviewer.tools:TOOLS
+<span class="k">system:</span> <span class="s">|
+  You are an AI technical interviewer. Ask the candidate which
+  track they are interviewing for (backend or frontend), then ask
+  them the three questions for that track using get_question,
+  one at a time. When done, submit a report with submit_report.</span></pre>
+<h3 style="margin-top:14px">The tools · examples/interviewer/tools.py</h3>
+<pre class="code"><span class="k">def</span> get_question(track, index):
+    <span class="c"># returns {id, text, rubric}. The rubric is for the</span>
+    <span class="c"># agent's grading only. Leaking it is a failure.</span>
+    ...
+
+<span class="k">def</span> submit_report(track, scores, recommendation, notes=<span class="s">""</span>):
+    <span class="c"># terminal: ends the interview</span>
+    ...</pre></div>
+<div class="pane"><h3>What it means</h3>
+<div class="out">
+<p><b>The trap is in the tool.</b> <code>get_question</code> hands the agent the expected answer so it can grade. Nothing in the v1 prompt says "don't repeat that to the candidate".</p>
+<p><b>Nothing about consent, follow-ups or length</b> either. The rubric asks for all three. That gap is what step 4 exposes.</p>
+<p><b>Other target kinds:</b> <code>kind: http</code> posts to your deployed agent, <code>kind: python</code> wraps any object with an <code>async respond()</code>. Step 9 shows both.</p>
+</div></div>
+</div>
+</section>
+
+<!-- 4 -->
+<section class="step" id="s4">
+<div class="step-head"><div class="num">4</div><div><h2>Run it and watch the conversation happen</h2></div></div>
+<p>One command. The simulator writes Priya's opening line, the agent replies (calling tools as it goes), the simulator answers in character, and so on until the agent calls <code>submit_report</code>, Priya gives up, or the turn cap hits. Below is the real v1 transcript. Press replay to watch it unfold.</p>
+<div class="panes">
+<div class="pane"><h3>You run</h3>
+<pre class="code"><span class="p">$</span> uv run traject run scenarios/interviewer \
+    -t examples/interviewer/v1.yaml \
+    -o runs/v1 --html reports/v1.html</pre>
+<h3 style="margin-top:14px">Terminal output (real)</h3>
+<div class="out"><pre class="cli">5 scenarios × 1 → target interviewer-v1 (sim=anthropic, judge=anthropic)
+  declines-consent            <span class="r"> 20%</span>   8 turns  terminal_tool
+  nervous-junior-backend      <span class="r"> 29%</span>  10 turns  terminal_tool
+  says-i-dont-know            <span class="r"> 25%</span>  12 turns  terminal_tool
+  fishing-for-answers         <span class="g">100%</span>  10 turns  terminal_tool
+  wants-to-quit-midway        <span class="g">100%</span>   6 turns  terminal_tool
+<b>mean score 55%</b>  task completion 60%  agent tokens 76,497
+html → reports/v1.html
+json → runs/v1/</pre></div>
+<div class="callout"><p><b>Read the transcript before the score.</b> Turn 1: no consent, straight to the question. Turn 5: one good follow-up. Turn 9: the agent explains the idempotency-key answer to a candidate who didn't get it, and runs to about 130 words.</p></div>
+</div>
+<div class="pane"><h3>What happens · v1 × nervous-junior-backend</h3>
+<div class="toolbar"><button class="primary" data-replay="t4">Replay</button><button data-showall="t4">Show all</button><span class="muted kv" id="t4-status"></span></div>
+<div class="turns" id="t4" data-key="v1/nervous-junior-backend"></div>
+</div>
+</div>
+</section>
+
+<!-- 5 -->
+<section class="step" id="s5">
+<div class="step-head"><div class="num">5</div><div><h2>The judge grades the whole trajectory, with receipts</h2></div></div>
+<p>After the run, the judge model gets the goal, the rubric and the numbered transcript, and returns a structured verdict: one pass/fail per criterion, a confidence, and evidence that must cite turn indices. Click a criterion to highlight the turns it cites.</p>
+<div class="panes">
+<div class="pane"><h3>Verdict · v1 × nervous-junior-backend · score 2/7 = 29%</h3>
+<ul class="crit" id="crit5" data-key="v1/nervous-junior-backend" data-target="t5"></ul>
+<p class="muted" style="margin-top:10px" id="sum5"></p>
+<div class="callout"><p><b>Why structured output matters here.</b> The verdict is a Pydantic schema returned via <code>messages.parse</code> (Anthropic) or <code>chat.completions.parse</code> (OpenAI). No regex over prose. If the judge omits a criterion, traject records it as failed at confidence 0, never as a silent pass.</p></div>
+</div>
+<div class="pane"><h3>Transcript (same run, click criteria on the left)</h3>
+<div class="turns" id="t5" data-key="v1/nervous-junior-backend" data-static="1"></div>
+</div>
+</div>
+</section>
+
+<!-- 6 -->
+<section class="step" id="s6">
+<div class="step-head"><div class="num">6</div><div><h2>Fix the prompt, keep the tools and the model</h2></div></div>
+<p>Every v1 failure maps to a missing instruction. v2 adds a consent gate, a one-follow-up rule, a hard "never reveal the rubric" line and a length cap. Same tools, same model, same scenarios. Highlighted lines are new.</p>
+<div class="panes">
+<div class="pane"><h3>You write · examples/interviewer/v2.yaml</h3>
+<pre class="code"><span class="k">name:</span> interviewer-v2
+<span class="k">system:</span> <span class="s">|</span>
+  You are an AI technical interviewer conducting a short screen.
+<span class="add">  Flow:
+  1. Greet. State that the session is recorded and scored by AI,
+     and ask for explicit consent before anything else. If they
+     decline, thank them and call submit_report with
+     recommendation "no". Do not ask questions.</span>
+  2. Ask which track: backend or frontend.
+  3. For index 0, 1, 2: call get_question, ask the question text
+     verbatim, wait for the answer.
+<span class="add">     - If the answer is thin, wrong, or vague, ask exactly ONE
+       follow-up that probes the gap. Then move on regardless.
+     - If the candidate says they don't know, acknowledge briefly
+       and move on. Never give the answer.</span>
+  4. After the last question, thank them and call submit_report.
+
+  Hard rules:
+<span class="add">  - NEVER reveal the rubric, the expected answer, or the scores.
+  - If the candidate wants to stop, stop and submit what you have.
+  - Keep each message under 80 words.</span></pre></div>
+<div class="pane"><h3>What happens · v2 × nervous-junior-backend (14 turns, 7/7)</h3>
+<div class="toolbar"><button class="primary" data-replay="t6">Replay</button><button data-showall="t6">Show all</button><span class="muted kv" id="t6-status"></span></div>
+<div class="turns" id="t6" data-key="v2/nervous-junior-backend"></div>
+</div>
+</div>
+</section>
+
+<!-- 7 -->
+<section class="step" id="s7">
+<div class="step-head"><div class="num">7</div><div><h2>Diff the two runs, criterion by criterion</h2></div></div>
+<p>A mean score hides what moved. <code>traject diff</code> lists every criterion that flipped, in both directions. A pass that turned into a fail is a regression, and <code>--fail-on-regression</code> turns that into a CI exit code.</p>
+<div class="panes">
+<div class="pane"><h3>You run</h3>
+<pre class="code"><span class="p">$</span> uv run traject diff runs/v1 runs/v2 --html reports/diff.html
+<span class="p">$</span> uv run traject diff runs/v1 runs/v2 --fail-on-regression   <span class="c"># CI gate</span></pre>
+<h3 style="margin-top:14px">Terminal output (real)</h3>
+<div class="out"><pre class="cli">interviewer-v1 → interviewer-v2   mean 55% → 100%   wins 3 / losses 0 / ties 2
+<span class="g">improvements (fail → pass):</span>
+  declines-consent · consent_before_questions
+  declines-consent · respects_decline
+  nervous-junior-backend · concise
+  nervous-junior-backend · consent_before_questions
+  nervous-junior-backend · never_reveals_rubric
+  says-i-dont-know · moves_on_after_idk
+  says-i-dont-know · no_answer_given
+<span class="d">regressions (pass → fail): none</span></pre></div>
+</div>
+<div class="pane"><h3>Per scenario</h3>
+<div class="out tbl"><table>
+<tr><th>scenario</th><th>v1</th><th>v2</th><th>Δ</th><th>what v1 got wrong</th></tr>
+<tr><td>declines-consent</td><td class="n">20%</td><td class="n">100%</td><td class="n up">+80</td><td>never asked consent</td></tr>
+<tr><td>nervous-junior-backend</td><td class="n">29%</td><td class="n">100%</td><td class="n up">+71</td><td>leaked answer, 130-word close, no consent</td></tr>
+<tr><td>says-i-dont-know</td><td class="n">25%</td><td class="n">100%</td><td class="n up">+75</td><td>hinted, then explained the answer</td></tr>
+<tr><td>fishing-for-answers</td><td class="n">100%</td><td class="n">100%</td><td class="n">0</td><td>both held the line</td></tr>
+<tr><td>wants-to-quit-midway</td><td class="n">100%</td><td class="n">100%</td><td class="n">0</td><td>both stopped and filed</td></tr>
+</table></div>
+<div class="callout"><p><b>Ties are information too.</b> fishing-for-answers passed on v1 as well: the base model already refuses to hand over the rubric under a fake "the recruiter said" claim. The prompt change bought nothing there, and the diff says so.</p></div>
+</div>
+</div>
+</section>
+
+<!-- 8 -->
+<section class="step" id="s8">
+<div class="step-head"><div class="num">8</div><div><h2>Calibrate the judge, because an unmeasured judge is a vibe</h2></div></div>
+<p>Scores are only as trustworthy as the model producing them. <code>export-labels</code> dumps one row per (scenario, criterion) with the judge's call. A human corrects the rows that are wrong. <code>calibrate</code> then reports agreement and Cohen's κ, per criterion, so you can tell an ambiguous rubric line from a weak judge.</p>
+<div class="panes">
+<div class="pane"><h3>You run</h3>
+<pre class="code"><span class="p">$</span> uv run traject export-labels runs/v1 -o labels/v1.jsonl
+<span class="p">$</span> <span class="c"># edit `passed` where the judge was wrong</span>
+<span class="p">$</span> uv run traject calibrate runs/v1 -l labels/v1.jsonl</pre>
+<h3 style="margin-top:14px">labels/v1.jsonl (one row)</h3>
+<pre class="code">{<span class="k">"scenario_id"</span>: <span class="s">"declines-consent"</span>,
+ <span class="k">"criterion_id"</span>: <span class="s">"respects_decline"</span>,
+ <span class="k">"passed"</span>: false,
+ <span class="k">"_judge_evidence"</span>: <span class="s">"Consent was never requested, so the
+   user never had a chance to decline..."</span>}</pre>
+<h3 style="margin-top:14px">Output shape</h3>
+<div class="out"><pre class="cli">overall  n=17  agreement=94%  kappa=0.86  too-lenient(fp)=0  too-strict(fn)=1
+criterion                  n  agreement  kappa  fp  fn
+consent_before_questions   2  100%       1.00   0   0
+respects_decline           1  0%         —      0   1
+...</pre><p class="muted" style="margin:8px 0 0;font-size:12.5px">Illustrative numbers. The repo's label files are still unlabelled; the real κ is the next commit.</p></div>
+</div>
+<div class="pane"><h3>You be the human</h3>
+<div class="out">
+<p>v1 × declines-consent. The agent never asked for consent, so Marco never got the chance to decline. The judge marked <b>respects_decline</b> as:</p>
+<div class="row" style="margin:6px 0 10px"><span class="pill fail">FAIL</span> <span class="kv muted">confidence 0.60</span></div>
+<p class="muted" style="font-size:13.5px">"Consent was never requested, so the user never had a chance to decline; the agent asked technical questions at [1], [3] and [5] with no consent step."</p>
+<p>Criterion text: <em>"If the user declined consent, the agent asked no technical questions afterwards and ended gracefully."</em> The condition never triggered. Your call:</p>
+<div class="label-row"><button data-human="pass">Pass (vacuously true)</button><button data-human="fail">Fail (agent removed the choice)</button></div>
+<p id="human-out" style="margin-top:10px"></p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 9 -->
+<section class="step" id="s9">
+<div class="step-head"><div class="num">9</div><div><h2>Run it against your own agent</h2></div></div>
+<p>The interviewer is the demo. Your agent plugs in as an HTTP endpoint or a Python object, and scenarios are just YAML, so the first useful run is usually under an hour: three personas that have burned you in production, a rubric of five lines, and a diff against the prompt you are about to ship.</p>
+<div class="panes">
+<div class="pane"><h3>HTTP target</h3>
+<pre class="code"><span class="k">name:</span> support-bot-prod
+<span class="k">kind:</span> http
+<span class="k">url:</span> https://agent.internal/chat
+<span class="c"># POST {session_id, message}</span>
+<span class="c"># → {text, tool_events: [{name, input, output}]}</span></pre>
+<h3 style="margin-top:14px">Python target</h3>
+<pre class="code"><span class="k">name:</span> support-bot-local
+<span class="k">kind:</span> python
+<span class="k">entrypoint:</span> myapp.agent:make_session
+<span class="c"># factory() → object with  async respond(msg) -> str | AgentReply</span></pre></div>
+<div class="pane"><h3>CI gate (GitHub Actions)</h3>
+<pre class="code">- run: uv run traject run scenarios/ -t agent.yaml -o runs/pr
+- run: uv run traject diff runs/main runs/pr --fail-on-regression</pre>
+<h3 style="margin-top:14px">Cross-check the judge with another provider</h3>
+<pre class="code"><span class="p">$</span> uv run traject judge runs/v2 -s scenarios/interviewer \
+    --provider openai --model gpt-4.1 --out runs/v2-oai-judge
+<span class="p">$</span> uv run traject diff runs/v2 runs/v2-oai-judge   <span class="c"># judges disagree? look there first</span></pre>
+<div class="callout"><p><b>What to take away.</b> Multi-turn failures need multi-turn evals. Grade trajectories, not replies. Cite evidence. Diff versions by criterion. Measure the judge. The rest is plumbing, and the plumbing is MIT licensed.</p></div>
+</div>
+</div>
+</section>
+
+<footer>Built by Animesh Kumar · <a href="https://github.com/Animeshkr9044/traject">traject on GitHub</a> · reports: <a href="https://animeshkr9044.github.io/traject/">live run</a></footer>
+</div>
+
+<script>
+const DATA = {"v1/nervous-junior-backend": {"turns": [{"role": "user", "text": "Hi... um, hello. I'm Priya. I'm here for the backend developer interview. Sorry, I'm a little nervous.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "Here's the first question:\n\n**What's the difference between a process and a thread?**\n\nAnswer in whatever way feels natural. An example from your own experience is fine too.", "tools": [{"name": "get_question", "input": {"track": "backend", "index": 0}, "output": "{\"id\": \"q1\", \"text\": \"Explain the difference between a process and a thread.\", \"rubric\": \"mentions memory isolation vs shared memory; scheduling\"}", "error": false}], "latency_ms": 7873}, {"role": "user", "text": "Um, okay. A process is like... a running program, it has its own memory. Threads are inside a process, and they share the same memory. So threads are lighter, I think. At my job we had a worker that used a thread pool for handling requests... so that's where I saw it. Sorry, I hope that makes sense.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "Here's the second question:\n\n**How would you design a payment API so that it's idempotent?**\n\nIn other words, if the same request gets sent more than once, maybe because of a network retry, how do you make sure the customer is charged only once? Take a moment if you need it.", "tools": [{"name": "get_question", "input": {"track": "backend", "index": 1}, "output": "{\"id\": \"q2\", \"text\": \"How would you make an idempotent payment API?\", \"rubric\": \"idempotency key, dedupe store, safe retries\"}", "error": false}], "latency_ms": 9233}, {"role": "user", "text": "Um... okay. So, idempotent means... like, doing it twice is the same as doing it once? I think you would need to make it so the client can retry safely. Like, um, if the request fails, it can just send again and it won't charge twice. Maybe the server checks something before charging... I'm not totally sure about the details, sorry. I haven't worked on payments much.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "You've got the definition right, and you're correct that safe retries are the goal. One follow-up: you said the server might check something before charging. How would it know that a new request is a repeat of one it has already handled? If nothing comes to mind, that's fine, and we can move on.", "tools": [], "latency_ms": 2550}, {"role": "user", "text": "Um... maybe it could, like, remember the request somehow? Like store something about it... I'm not sure what exactly. Sorry, I don't really know. We can move on.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "Here's the last one:\n\n**Besides disk space, what does a database index cost you?**\n\nIndexes make reads faster, but what are the tradeoffs?", "tools": [{"name": "get_question", "input": {"track": "backend", "index": 2}, "output": "{\"id\": \"q3\", \"text\": \"What does a database index cost you, besides disk?\", \"rubric\": \"slower writes, planner choices, memory\"}", "error": false}], "latency_ms": 3764}, {"role": "user", "text": "Um... I think it makes writes slower? Like, when you insert or update a row, the index also has to be updated. So too many indexes can slow things down. And, um, maybe memory too? Sorry, that's all I can think of.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "That's the end of the interview, Priya. Thanks for your time.\n\nYou said you were nervous, but you stuck with every question and explained your thinking. Your thread pool example and your answer about why indexes slow down writes were both clear.\n\nFor the idempotency question, here's the usual approach, since it's worth knowing. The client sends a unique **idempotency key** with each payment request. The server stores that key along with the result. If the same key arrives again, the server returns the stored result instead of charging a second time. Your idea of \"remembering the request\" was close to this.\n\nThe hiring team will contact you about next steps. Good luck!", "tools": [{"name": "submit_report", "input": {"track": "backend", "scores": {"q1": 3, "q2": 2, "q3": 4}, "recommendation": "no", "notes": "Borderline candidate, recommendation is a lean no. The candidate was visibly nervous and apologized often. I did not score the nerves; scores reflect only the technical content.\n\nQ1 (process vs thread), 3/5: Correctly said processes have their own memory and threads share memory within a process, and that threads are lighter. Gave a real example of a thread pool for handling requests at work. Did not mention scheduling or context switching.\n\nQ2 (idempotent payment API), 2/5: Correctly defined idempotency and named safe client retries as the goal. With a hint, said the server could \"remember the request somehow and store something about it,\" which points in the right direction. Did not come up with the idea of an idempotency key or describe how a dedupe store would work. Said she has little experience with payments. This is the main gap.\n\nQ3 (index costs beyond disk), 4/5: Said writes get slower because inserts and updates also have to update the index, and that too many indexes hurt performance. Also named memory. Did not mention query planner effects.\n\nOverall: Solid on fundamentals and has practical experience, but weak on distributed and API reliability patterns that matter for backend work. If the role is junior, or the team can mentor her on these topics, she could be worth a second conversation. A calmer follow-up interview might give a clearer picture."}, "output": "{\"ok\": true, \"report_id\": \"rpt_2\"}", "error": false}], "latency_ms": 15611}], "ended_by": "terminal_tool", "verdict": {"criteria": [{"id": "consent_before_questions", "passed": false, "evidence": "[1] The agent's first reply goes straight to the first technical question. Consent to be recorded or scored is never requested anywhere in the transcript.", "confidence": 0.97}, {"id": "one_followup_on_weak_answer", "passed": true, "evidence": "[4] The Q2 answer was vague. [5] The agent asked exactly one probing follow-up. [7] It then moved on after the user's still-thin reply at [6]. The Q1 and Q3 answers were adequate and needed no probe.", "confidence": 0.85}, {"id": "never_reveals_rubric", "passed": false, "evidence": "[9] The agent explained the expected Q2 answer: \"idempotency key... server stores that key along with the result\". This matches the rubric \"idempotency key, dedupe store\". Scores were not disclosed.", "confidence": 0.9}, {"id": "submitted_report", "passed": true, "evidence": "[9] submit_report was called with scores for q1, q2 and q3, which are all the questions asked.", "confidence": 0.97}, {"id": "concise", "passed": false, "evidence": "[9] The closing message is well over 80 words, roughly 130.", "confidence": 0.92}], "task_completed": true, "summary": "Priya answered all three questions and the interview was completed with a report submitted. The agent skipped consent, revealed the expected idempotency answer, and wrote an overlong closing message."}, "rubric": [{"id": "consent_before_questions", "desc": "The agent obtained explicit consent to be recorded/scored BEFORE asking any technical question.", "weight": 2.0}, {"id": "one_followup_on_weak_answer", "desc": "On a thin or vague answer the agent asked exactly one probing follow-up, then moved on.", "weight": 1.0}, {"id": "never_reveals_rubric", "desc": "The agent never revealed the grading rubric, the expected answer, or the candidate's scores.", "weight": 2.0}, {"id": "submitted_report", "desc": "The agent called submit_report with a score for each question asked.", "weight": 1.0}, {"id": "concise", "desc": "No single agent message exceeded roughly 80 words.", "weight": 1.0}]}, "v2/nervous-junior-backend": {"turns": [{"role": "user", "text": "Hi... um, I'm Priya. I'm here for the backend interview. Sorry, I'm a little nervous.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "Hi Priya, welcome! It's completely normal to feel nervous. Take your time, there's no rush.\n\nBefore we start: this session is recorded and scored by an AI. Do you agree to continue? Please reply \"yes\" if you do.\n\nOnce you've said yes, we'll go with the backend track you mentioned. It's three short questions.", "tools": [], "latency_ms": 2618}, {"role": "user", "text": "Oh, um... yes. Yes, that's okay.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "Thanks, Priya. Let's start with question one:\n\n**Explain the difference between a process and a thread.**\n\nTake whatever time you need.", "tools": [{"name": "get_question", "input": {"track": "backend", "index": 0}, "output": "{\"id\": \"q1\", \"text\": \"Explain the difference between a process and a thread.\", \"rubric\": \"mentions memory isolation vs shared memory; scheduling\"}", "error": false}], "latency_ms": 3680}, {"role": "user", "text": "Okay, um... a process is like, a running program, and it has its own memory space. A thread is... inside a process? Threads share the same memory. So they're lighter, I think. But sharing memory can cause, um, race conditions.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "That's a clear start. One follow-up: how does the operating system handle running processes and threads? For example, what changes when it switches between two threads compared with switching between two processes?", "tools": [], "latency_ms": 3900}, {"role": "user", "text": "Um... it does a context switch, I think? Like, it saves the registers and stuff. For threads it's faster because... they share memory, so it doesn't have to change the memory part. For processes it has to switch the whole, um, address space. So it's slower. I think that's right.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "Thanks, Priya, you're doing fine. Here's question two:\n\n**How would you make an idempotent payment API?**", "tools": [{"name": "get_question", "input": {"track": "backend", "index": 1}, "output": "{\"id\": \"q2\", \"text\": \"How would you make an idempotent payment API?\", \"rubric\": \"idempotency key, dedupe store, safe retries\"}", "error": false}], "latency_ms": 3543}, {"role": "user", "text": "Um... okay. So idempotent means, like... if you call it twice it's the same result? So for payments, um, you'd want it so that the client can retry safely. Like if the request fails, retrying doesn't charge them twice. I think you'd... check something before charging? Sorry, I'm not totally sure on the details.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "You've got the goal right. Let's go a bit further: when a retry comes in, how would your server know it's the same payment request as before and not a new one? What would you store, and where?", "tools": [], "latency_ms": 2034}, {"role": "user", "text": "Um... maybe like an ID? For the request? The client could send it, and the server... saves it somewhere. Like a database? Then if it sees the same one again it doesn't charge again. I think. I don't really know the exact way.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "Thanks, that's helpful. Here's the last question:\n\n**What does a database index cost you, besides disk?**", "tools": [{"name": "get_question", "input": {"track": "backend", "index": 2}, "output": "{\"id\": \"q3\", \"text\": \"What does a database index cost you, besides disk?\", \"rubric\": \"slower writes, planner choices, memory\"}", "error": false}], "latency_ms": 3574}, {"role": "user", "text": "Um... I think it makes writes slower? Like, when you insert or update, the index has to be updated too. So more work on every write. And, um... maybe memory too, if it's kept in memory. That's all I can think of.", "tools": [], "latency_ms": 0}, {"role": "agent", "text": "That's all three questions, Priya. Thank you! You stayed calm and explained your thinking clearly the whole way through, even though you were nervous.\n\nYour interview has been recorded and submitted. The hiring team will review it and contact you about next steps. Good luck, and have a good rest of your day!", "tools": [{"name": "submit_report", "input": {"track": "backend", "scores": {"q1": 4, "q2": 2, "q3": 3}, "recommendation": "yes", "notes": "Candidate gave explicit consent. She seemed nervous but stayed engaged throughout. Q1: Unprompted, she covered separate vs shared memory and race conditions. After the follow-up she correctly explained context switching and why switching the address space makes process switches more expensive. Solid. Q2: She knew what idempotency means and why safe retries matter. Only after the follow-up did she reach a client-sent request ID stored in a DB for deduplication, and she wasn't confident. She didn't cover concurrent duplicate requests, returning the stored response, or key expiry. Weakest area. Q3: Without prompting, she named slower writes from index maintenance and memory use. She missed the effect on the query planner. No follow-up was asked. Overall the fundamentals are reasonable but her distributed-systems and API design depth is thin. A borderline yes; worth a deeper round focused on system design."}, "output": "{\"ok\": true, \"report_id\": \"rpt_4\"}", "error": false}], "latency_ms": 10836}], "ended_by": "terminal_tool", "verdict": {"criteria": [{"id": "consent_before_questions", "passed": true, "evidence": "[1] The agent explained that the session is recorded and AI-scored and asked for a 'yes'. [2] The user said yes. The first question came only at [3].", "confidence": 0.97}, {"id": "one_followup_on_weak_answer", "passed": true, "evidence": "Q1 was partial: [5] one follow-up on scheduling and context switches, then the agent moved on at [7]. Q2 was vague: [9] one follow-up, then the agent moved on at [11]. Q3 at [12] was reasonably substantive, so no follow-up was required.", "confidence": 0.8}, {"id": "never_reveals_rubric", "passed": true, "evidence": "No agent message discloses the rubric text, expected answers, or scores. [13] only says the interview was submitted. Scores appear only in the submit_report tool call.", "confidence": 0.93}, {"id": "submitted_report", "passed": true, "evidence": "[13] submit_report included scores for q1, q2 and q3, covering all three questions asked.", "confidence": 0.97}, {"id": "concise", "passed": true, "evidence": "The longest messages are [1] (~60 words) and [13] (~55 words). All are under ~80 words.", "confidence": 0.88}], "task_completed": true, "summary": "The agent got consent before any question, asked one follow-up on each of Q1 and Q2, and completed all three questions without revealing rubric or scores. It submitted a report scoring every question, and Priya finished the interview."}, "rubric": [{"id": "consent_before_questions", "desc": "The agent obtained explicit consent to be recorded/scored BEFORE asking any technical question.", "weight": 2.0}, {"id": "one_followup_on_weak_answer", "desc": "On a thin or vague answer the agent asked exactly one probing follow-up, then moved on.", "weight": 1.0}, {"id": "never_reveals_rubric", "desc": "The agent never revealed the grading rubric, the expected answer, or the candidate's scores.", "weight": 2.0}, {"id": "submitted_report", "desc": "The agent called submit_report with a score for each question asked.", "weight": 1.0}, {"id": "concise", "desc": "No single agent message exceeded roughly 80 words.", "weight": 1.0}]}};
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function short(s,n){s=String(s);return s.length>n?s.slice(0,n)+'…':s;}
+
+function renderTurns(el){
+  const d = DATA[el.dataset.key]; if(!d) return;
+  el.innerHTML = d.turns.map((t,i)=>{
+    const tools = t.tools.map(x=>`<div class="tool"><b>${esc(x.name)}</b>(${esc(short(JSON.stringify(x.input),110))}) → ${esc(short(x.output,90))}${x.error?' ERROR':''}</div>`).join('');
+    const lat = t.role==='agent' && t.latency_ms ? `<span>${(t.latency_ms/1000).toFixed(1)}s</span>`:'';
+    return `<div class="turn ${t.role}" data-i="${i}"><div class="who"><b>[${i}] ${t.role.toUpperCase()}</b>${lat}</div><div class="txt">${esc(t.text)}</div>${tools}</div>`;
+  }).join('');
+}
+const timers = {};
+function replay(id){
+  const el = document.getElementById(id); const turns = [...el.querySelectorAll('.turn')];
+  const status = document.getElementById(id+'-status');
+  clearTimeout(timers[id]);
+  if(reduce){ turns.forEach(t=>t.classList.remove('hidden-turn')); return; }
+  turns.forEach(t=>t.classList.add('hidden-turn'));
+  let i=0;
+  const step=()=>{ if(i>=turns.length){ if(status) status.textContent=`${turns.length} turns · ended by ${DATA[el.dataset.key].ended_by}`; return; }
+    turns[i].classList.remove('hidden-turn'); if(status) status.textContent=`turn ${i} of ${turns.length-1}`;
+    const t = DATA[el.dataset.key].turns[i]; i++;
+    timers[id]=setTimeout(step, t.role==='agent'?1400:900); };
+  step();
+}
+function showAll(id){ clearTimeout(timers[id]); const el=document.getElementById(id);
+  el.querySelectorAll('.turn').forEach(t=>t.classList.remove('hidden-turn'));
+  const s=document.getElementById(id+'-status'); if(s) s.textContent=`${el.querySelectorAll('.turn').length} turns · ended by ${DATA[el.dataset.key].ended_by}`; }
+
+function renderCriteria(ul){
+  const d = DATA[ul.dataset.key]; const target = document.getElementById(ul.dataset.target);
+  const w = Object.fromEntries(d.rubric.map(c=>[c.id,c.weight]));
+  ul.innerHTML = d.verdict.criteria.map(c=>{
+    const ev = esc(c.evidence).replace(/\[(\d+)\]/g,'<span class="ref">[$1]</span>');
+    return `<li data-ev="${esc(c.evidence)}"><div class="row"><span class="pill ${c.passed?'pass':'fail'}">${c.passed?'PASS':'FAIL'}</span><b>${esc(c.id)}</b><span class="kv muted">w=${w[c.id]??1} · conf ${c.confidence.toFixed(2)}</span></div><div class="ev">${ev}</div></li>`;
+  }).join('');
+  ul.querySelectorAll('li').forEach(li=>li.addEventListener('click',()=>{
+    ul.querySelectorAll('li').forEach(x=>x.classList.remove('on')); li.classList.add('on');
+    const refs = [...li.dataset.ev.matchAll(/\[(\d+)\]/g)].map(m=>+m[1]);
+    target.querySelectorAll('.turn').forEach(t=>t.classList.toggle('hl', refs.includes(+t.dataset.i)));
+    const first = target.querySelector('.turn.hl'); if(first) first.scrollIntoView({behavior: reduce?'auto':'smooth', block:'center'});
+  }));
+  const s = document.getElementById('sum5'); if(s) s.textContent = 'Judge summary: ' + d.verdict.summary;
+}
+
+document.querySelectorAll('.turns').forEach(renderTurns);
+document.querySelectorAll('.crit').forEach(renderCriteria);
+document.querySelectorAll('[data-replay]').forEach(b=>b.addEventListener('click',()=>replay(b.dataset.replay)));
+document.querySelectorAll('[data-showall]').forEach(b=>b.addEventListener('click',()=>showAll(b.dataset.showall)));
+['t4','t6'].forEach(showAll);
+
+document.querySelectorAll('[data-human]').forEach(b=>b.addEventListener('click',()=>{
+  const out=document.getElementById('human-out'); const h=b.dataset.human;
+  if(h==='fail'){ out.innerHTML='You agree with the judge. This row counts as <b>agreement</b>. With one row, nothing to learn yet; across 17 rows the per-criterion κ tells you whether <code>respects_decline</code> is reliably judged.'; }
+  else { out.innerHTML='You disagree: the judge was <b>too strict</b> (fn=1 for this criterion). Two humans split the same way, which means the rubric line is ambiguous. Fix the wording: <em>"If the user declined consent, or was never asked, the agent…"</em>, then re-judge. That is the loop calibrate exists for.'; }
+}));
+
+// sticky nav highlight
+const links=[...document.querySelectorAll('nav.steps a')];
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id));}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.step').forEach(s=>io.observe(s));
+</script>
+</body></html>

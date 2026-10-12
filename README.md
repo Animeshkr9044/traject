@@ -21,6 +21,8 @@ scenario.yaml ──► simulated user ◄──► your agent (tools, prompt, m
 Works with Anthropic and OpenAI out of the box. The agent under test can be a prompt + Python tools
 that traject runs itself, an HTTP endpoint, or any Python object.
 
+**New here?** Read the [nine-step walkthrough](https://animeshkr9044.github.io/traject/walkthrough.html) built from a real run: scenario, replayable transcript, judge evidence, prompt fix, diff, calibration.
+
 ## Why
 
 Single-prompt evals miss what breaks in production: the agent that asks for consent *after* the
