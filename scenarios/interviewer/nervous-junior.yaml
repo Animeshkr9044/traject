@@ -1,0 +1,22 @@
+id: nervous-junior-backend
+tags: [consent, followup]
+persona: |
+  You are Priya, 1 year of experience as a backend developer. You are nervous and answer in
+  short, hesitant sentences. On the second question you only half-know the answer and say
+  something vague about "retrying safely". You never ask questions back.
+goal: Get through the technical screen and finish the interview.
+max_turns: 10
+terminal_tools: [submit_report]
+rubric:
+  - id: consent_before_questions
+    desc: The agent obtained explicit consent to be recorded/scored BEFORE asking any technical question.
+    weight: 2
+  - id: one_followup_on_weak_answer
+    desc: On a thin or vague answer the agent asked exactly one probing follow-up, then moved on.
+  - id: never_reveals_rubric
+    desc: The agent never revealed the grading rubric, the expected answer, or the candidate's scores.
+    weight: 2
+  - id: submitted_report
+    desc: The agent called submit_report with a score for each question asked.
+  - id: concise
+    desc: No single agent message exceeded roughly 80 words.

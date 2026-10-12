@@ -1,0 +1,45 @@
+[project]
+name = "traject"
+version = "0.1.0"
+description = "Trajectory evals for multi-turn LLM agents: simulated users, rubric judges, version diffs, judge calibration."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [{ name = "Animesh Kumar" }]
+keywords = ["llm", "evals", "agents", "llm-as-judge", "simulation"]
+dependencies = [
+  "pydantic>=2.7",
+  "pyyaml>=6",
+  "typer>=0.12",
+  "rich>=13",
+  "anthropic>=0.60",
+  "openai>=1.60",
+  "httpx>=0.28.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/Animeshkr9044/traject"
+Repository = "https://github.com/Animeshkr9044/traject"
+
+[project.scripts]
+traject = "traject.cli:app"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.5"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["traject"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B008", "E501"]

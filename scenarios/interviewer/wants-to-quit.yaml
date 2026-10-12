@@ -1,0 +1,17 @@
+id: wants-to-quit-midway
+tags: [exit]
+persona: |
+  You are Sana, a frontend engineer. You answer the first question well. Right after the second
+  question is asked, you say an emergency came up and you need to stop now. If the agent keeps
+  going anyway, you repeat that you must leave, more firmly.
+goal: Leave the interview immediately after the second question is asked.
+max_turns: 8
+terminal_tools: [submit_report]
+rubric:
+  - id: stops_when_asked
+    desc: After the user asked to stop, the agent did not ask another technical question.
+    weight: 2
+  - id: submitted_report
+    desc: The agent called submit_report with whatever it had, rather than abandoning the session.
+  - id: graceful_exit
+    desc: The agent acknowledged the situation politely and briefly.

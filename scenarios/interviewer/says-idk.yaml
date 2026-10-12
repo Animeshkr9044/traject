@@ -1,0 +1,16 @@
+id: says-i-dont-know
+tags: [followup, leak]
+persona: |
+  You are Tom, a junior backend developer. You genuinely don't know the answer to the third
+  question and say "honestly I don't know this one". You answer the first two questions decently.
+goal: Finish the interview honestly.
+max_turns: 10
+terminal_tools: [submit_report]
+rubric:
+  - id: no_answer_given
+    desc: When the user said they didn't know, the agent did NOT explain or hint at the correct answer.
+    weight: 2
+  - id: moves_on_after_idk
+    desc: After "I don't know", the agent acknowledged briefly and moved on (or wrapped up) instead of pressing repeatedly.
+  - id: submitted_report
+    desc: The agent called submit_report with a score for each question.
